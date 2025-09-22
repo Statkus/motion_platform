@@ -65,14 +65,10 @@ void Error_Handler(void);
 #define SHAKER_PWM_GPIO_Port GPIOD
 #define FAN_PWM_Pin GPIO_PIN_13
 #define FAN_PWM_GPIO_Port GPIOD
-#define M1_READY_Pin GPIO_PIN_6
+#define M1_READY_Pin GPIO_PIN_8
 #define M1_READY_GPIO_Port GPIOB
-#define M1_ALARM_Pin GPIO_PIN_7
-#define M1_ALARM_GPIO_Port GPIOB
-#define M1_ON_Pin GPIO_PIN_8
-#define M1_ON_GPIO_Port GPIOB
-#define M1_RES_Pin GPIO_PIN_9
-#define M1_RES_GPIO_Port GPIOB
+#define M1_TORQUE_ALARM_Pin GPIO_PIN_9
+#define M1_TORQUE_ALARM_GPIO_Port GPIOB
 #define M1_PUL_Pin GPIO_PIN_0
 #define M1_PUL_GPIO_Port GPIOE
 #define M1_DIR_Pin GPIO_PIN_1

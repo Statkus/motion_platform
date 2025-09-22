@@ -344,7 +344,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLM = 10;
   RCC_OscInitStruct.PLL.PLLN = 384;
   RCC_OscInitStruct.PLL.PLLP = 2;
-  RCC_OscInitStruct.PLL.PLLQ = 2;
+  RCC_OscInitStruct.PLL.PLLQ = 20;
   RCC_OscInitStruct.PLL.PLLR = 2;
   RCC_OscInitStruct.PLL.PLLRGE = RCC_PLL1VCIRANGE_1;
   RCC_OscInitStruct.PLL.PLLVCOSEL = RCC_PLL1VCOWIDE;
@@ -502,9 +502,6 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOE, LED_Pin|M1_PUL_Pin|M1_DIR_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, M1_ON_Pin|M1_RES_Pin, GPIO_PIN_RESET);
-
   /*Configure GPIO pins : LED_Pin M1_PUL_Pin M1_DIR_Pin */
   GPIO_InitStruct.Pin = LED_Pin|M1_PUL_Pin|M1_DIR_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -512,17 +509,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : M1_READY_Pin M1_ALARM_Pin */
-  GPIO_InitStruct.Pin = M1_READY_Pin|M1_ALARM_Pin;
+  /*Configure GPIO pins : M1_READY_Pin M1_TORQUE_ALARM_Pin */
+  GPIO_InitStruct.Pin = M1_READY_Pin|M1_TORQUE_ALARM_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : M1_ON_Pin M1_RES_Pin */
-  GPIO_InitStruct.Pin = M1_ON_Pin|M1_RES_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
