@@ -80,6 +80,12 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN Private defines */
 
+#define DIR_DELAY      2
+#define PUL_DOWN_DELAY 2
+
+//#define M_MAX_SPEED        25000 // step/s
+//#define M_MAX_ACCELERATION 5000
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
