@@ -76,8 +76,9 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN Private defines */
 
-#define DIR_DELAY      2
-#define PUL_DOWN_DELAY 2
+#define DIRECTION_DELAY  2
+#define PULSE_DOWN_DELAY 2
+#define HOME_STEP_DELAY  100
 
 //#define M_MAX_SPEED        25000 // step/s
 //#define M_MAX_ACCELERATION 5000

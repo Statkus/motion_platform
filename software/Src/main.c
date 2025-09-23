@@ -23,12 +23,39 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include "motion_platform_configuration.h"
 #include "usbd_cdc_if.h"
 
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
+
+typedef struct
+{
+  GPIO_TypeDef *Port;
+  uint16_t Pin;
+} GPIO;
+
+typedef struct
+{
+  GPIO Pulse_GPIO;
+  GPIO Direction_GPIO;
+  GPIO Ready_GPIO;
+  GPIO Torque_Alarm_GPIO;
+
+  uint16_t Position;
+  uint16_t Target_Position;
+  GPIO_PinState Direction;
+
+  uint8_t Needs_Homing;
+} Motor;
+
+typedef enum
+{
+  Home,
+  Run
+} State;
 
 /* USER CODE END PTD */
 
@@ -49,6 +76,34 @@ TIM_HandleTypeDef htim4;
 
 /* USER CODE BEGIN PV */
 
+Motor motors[NB_MOTORS] = {
+  {.Pulse_GPIO =
+    {.Port = M1_PUL_GPIO_Port,
+     .Pin  = M1_PUL_Pin},
+   .Direction_GPIO =
+    {.Port = M1_DIR_GPIO_Port,
+     .Pin  = M1_DIR_Pin},
+   .Ready_GPIO =
+    {.Port = M1_READY_GPIO_Port,
+     .Pin  = M1_READY_Pin},
+   .Torque_Alarm_GPIO =
+    {.Port = M1_TORQUE_ALARM_GPIO_Port,
+     .Pin  = M1_TORQUE_ALARM_Pin},
+
+   .Position        = 0,
+   .Target_Position = 0,
+   .Direction       = GPIO_PIN_RESET,
+
+   .Needs_Homing = 1},
+};
+
+uint16_t m_speed        = 0; // step/s
+uint16_t m_target_speed = 0; // step/s
+
+// TODO: remove after correct value found and use define instead
+uint16_t M_MAX_SPEED        = 25000;
+uint16_t M_MAX_ACCELERATION = 0;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -59,7 +114,10 @@ static void MX_TIM3_Init(void);
 static void MX_TIM4_Init(void);
 /* USER CODE BEGIN PFP */
 
-void Delay_Us (uint16_t us);
+void Receive_Commands(void);
+void Move_Motors_To_Home(void);
+void Move_Motors_To_Target(void);
+void Delay_Us(uint16_t us);
 
 /* USER CODE END PFP */
 
@@ -105,82 +163,16 @@ int main(void)
   MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
 
-  HAL_GPIO_WritePin (M1_PUL_GPIO_Port, M1_PUL_Pin, GPIO_PIN_SET);
-  //HAL_GPIO_WritePin (M2_PUL_GPIO_Port, M2_PUL_Pin, GPIO_PIN_SET);
-  //HAL_GPIO_WritePin (M3_PUL_GPIO_Port, M3_PUL_Pin, GPIO_PIN_SET);
-  //HAL_GPIO_WritePin (M4_PUL_GPIO_Port, M4_PUL_Pin, GPIO_PIN_SET);
+  State state = Home;
+
+  for (int i = 0; i < NB_MOTORS; i++) {
+    motors[i].Direction = GPIO_PIN_RESET;
+
+    HAL_GPIO_WritePin(motors[i].Pulse_GPIO.Port, motors[i].Pulse_GPIO.Pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(motors[i].Direction_GPIO.Port, motors[i].Direction_GPIO.Pin, motors[i].Direction);
+  }
 
   HAL_TIM_Base_Start(&htim3);
-
-  uint16_t M_Pos[10] = {0};
-  uint16_t M_Pos_Target[10] = {0};
-
-  GPIO_PinState M_Dir[10] =
-   {GPIO_PIN_RESET,
-    GPIO_PIN_RESET,
-    GPIO_PIN_RESET,
-    GPIO_PIN_RESET,
-    GPIO_PIN_RESET,
-    GPIO_PIN_RESET,
-    GPIO_PIN_RESET,
-    GPIO_PIN_RESET,
-    GPIO_PIN_RESET,
-    GPIO_PIN_RESET};
-
-  GPIO_TypeDef *M_PUL_GPIO_Port[10] =
-   {M1_PUL_GPIO_Port,
-    M1_PUL_GPIO_Port,
-    M1_PUL_GPIO_Port,
-    M1_PUL_GPIO_Port,
-    M1_PUL_GPIO_Port,
-    M1_PUL_GPIO_Port,
-    M1_PUL_GPIO_Port,
-    M1_PUL_GPIO_Port,
-    M1_PUL_GPIO_Port,
-    M1_PUL_GPIO_Port};
-
-  const uint16_t M_PUL_Pin[10] =
-   {M1_PUL_Pin,
-    M1_PUL_Pin,
-    M1_PUL_Pin,
-    M1_PUL_Pin,
-    M1_PUL_Pin,
-    M1_PUL_Pin,
-    M1_PUL_Pin,
-    M1_PUL_Pin,
-    M1_PUL_Pin,
-    M1_PUL_Pin};
-
-  GPIO_TypeDef *M_DIR_GPIO_Port[10] =
-   {M1_DIR_GPIO_Port,
-    M1_DIR_GPIO_Port,
-    M1_DIR_GPIO_Port,
-    M1_DIR_GPIO_Port,
-    M1_DIR_GPIO_Port,
-    M1_DIR_GPIO_Port,
-    M1_DIR_GPIO_Port,
-    M1_DIR_GPIO_Port,
-    M1_DIR_GPIO_Port,
-    M1_DIR_GPIO_Port};
-
-  const uint16_t M_DIR_Pin[10] =
-   {M1_DIR_Pin,
-    M1_DIR_Pin,
-    M1_DIR_Pin,
-    M1_DIR_Pin,
-    M1_DIR_Pin,
-    M1_DIR_Pin,
-    M1_DIR_Pin,
-    M1_DIR_Pin,
-    M1_DIR_Pin,
-    M1_DIR_Pin};
-
-  uint16_t M_Speed        = 0; // step/s
-  uint16_t M_Target_Speed = 0; // step/s
-
-  // TODO: remove after correct value found and use define instead
-  uint16_t M_MAX_SPEED        = 25000;
-  uint16_t M_MAX_ACCELERATION = 0;
 
   HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_3);
   HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_4);
@@ -196,115 +188,48 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    HAL_GPIO_TogglePin (LED_GPIO_Port, LED_Pin);
 
-    if (Is_New_Data() > 0) {
-      HAL_GPIO_TogglePin (LED_GPIO_Port, LED_Pin);
-
-      M_Pos_Target[0] = Get_M1_Pos_Target();
-      M_Pos_Target[1] = Get_M2_Pos_Target();
-      M_Pos_Target[2] = Get_M3_Pos_Target();
-      M_Pos_Target[3] = Get_M4_Pos_Target();
-
-      M_MAX_SPEED        = (uint16_t)(Get_Max_Speed()) * 100;
-      M_MAX_ACCELERATION = (uint16_t)(Get_Max_Acceleration()) * 100;
-
-      uint16_t Dist[4] = {0};
-
-      for (int i = 0; i < 4; i++) {
-        if (M_Pos[i] > M_Pos_Target[i]) {
-          Dist[i] = M_Pos[i] - M_Pos_Target[i];
-        } else {
-          Dist[i] = M_Pos_Target[i] - M_Pos[i];
-        }
-      }
-
-      if (Dist[0] > 0 ||
-          Dist[1] > 0 ||
-          Dist[2] > 0 ||
-          Dist[3] > 0) {
-        M_Target_Speed =
-         (uint16_t)(MIN(((int)(MAX(MAX(MAX(Dist[0], Dist[1]), Dist[2]), Dist[3])) * 1000000) / MESSAGE_PERIOD, M_MAX_SPEED));
-      }
-
-      __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_3, 500 + (Get_Shaker_PWM() * 2));
-      __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_4, Get_Fan_PWM() * 4);
-    }
-
-    if (M_Pos[0] != M_Pos_Target[0] ||
-        M_Pos[1] != M_Pos_Target[1] ||
-        M_Pos[2] != M_Pos_Target[2] ||
-        M_Pos[3] != M_Pos_Target[3]) {
-      uint8_t Change_DIR = 0;
-
-      for (int i = 0; i < 4; i++) {
-        if (M_Pos[i] != M_Pos_Target[i]) {
-          const GPIO_PinState New_Dir =
-           (M_Pos[i] < M_Pos_Target[i]) ? GPIO_PIN_RESET : GPIO_PIN_SET;
-
-          if (New_Dir != M_Dir[i]) {
-            HAL_GPIO_WritePin (M_DIR_GPIO_Port[i], M_DIR_Pin[i], New_Dir);
-
-            M_Dir[i] = New_Dir;
-
-            Change_DIR = 1;
-          }
-        }
-      }
-
-      if (Change_DIR > 0) {
-        Delay_Us(DIR_DELAY);
-      }
-
-      for (int i = 0; i < 4; i++) {
-        if (M_Pos[i] != M_Pos_Target[i]) {
-          HAL_GPIO_WritePin (M_PUL_GPIO_Port[i], M_PUL_Pin[i], GPIO_PIN_RESET);
-        }
-      }
-
-      Delay_Us(PUL_DOWN_DELAY);
-
-      for (int i = 0; i < 4; i++) {
-        if (M_Pos[i] != M_Pos_Target[i]) {
-          if (M_Dir[i] == GPIO_PIN_RESET) {
-            M_Pos[i]++;
-          } else {
-            M_Pos[i]--;
-          }
-
-          HAL_GPIO_WritePin (M_PUL_GPIO_Port[i], M_PUL_Pin[i], GPIO_PIN_SET);
-        }
-      }
-
-      if (M_Speed != M_Target_Speed)
+    switch (state)
+    {
+      case Home:
       {
-        int error = M_Target_Speed - M_Speed;
+        uint8_t needs_homing = 0;
 
-        if (abs(error) < M_MAX_ACCELERATION)
+        for (int i = 0; i < NB_MOTORS; i++)
         {
-          M_Speed = M_Target_Speed;
+          if (motors[i].Needs_Homing > 0)
+          {
+            if (HAL_GPIO_ReadPin(motors[i].Torque_Alarm_GPIO.Port, motors[i].Torque_Alarm_GPIO.Pin) == GPIO_PIN_RESET)
+            {
+              motors[i].Position        = 0;
+              motors[i].Target_Position = 0;
+              motors[i].Needs_Homing    = 0;
+            }
+            else
+            {
+              needs_homing = 1;
+            }
+          }
+        }
+
+        if (needs_homing == 1)
+        {
+          Move_Motors_To_Home();
         }
         else
         {
-          if (error > 0)
-          {
-            M_Speed += M_MAX_ACCELERATION;
-          }
-          else
-          {
-            M_Speed -= M_MAX_ACCELERATION;
-          }
+          state = Run;
         }
+
+        break;
       }
 
-      if (M_Speed > 0)
-      {
-        Delay_Us((uint16_t)(MIN(1000000 / (int)(M_Speed), 65535)));
-      }
-    }
-    else
-    {
-      M_Speed = 0;
+      case Run:
+        Receive_Commands();
+
+        Move_Motors_To_Target();
+
+        break;
     }
   }
   /* USER CODE END 3 */
@@ -520,6 +445,198 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+void Receive_Commands(void)
+{
+  if (Is_New_Data() > 0)
+  {
+    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+
+    uint16_t dist[NB_MOTORS] = {0};
+    int max_dist             = 0;
+
+    for (int i = 0; i < NB_MOTORS; i++)
+    {
+      motors[i].Target_Position = Get_M_Pos_Target(i);
+
+      if (motors[i].Position > motors[i].Target_Position)
+      {
+        dist[i] = motors[i].Position - motors[i].Target_Position;
+      }
+      else
+      {
+        dist[i] = motors[i].Target_Position - motors[i].Position;
+      }
+
+      if (dist[i] > max_dist)
+      {
+        max_dist = dist[i];
+      }
+    }
+
+    M_MAX_SPEED        = (uint16_t)(Get_Max_Speed()) * 100;
+    M_MAX_ACCELERATION = (uint16_t)(Get_Max_Acceleration()) * 100;
+
+    if (max_dist > 0)
+    {
+      m_target_speed = (uint16_t)(MIN(max_dist * 1000000 / MESSAGE_PERIOD, M_MAX_SPEED));
+    }
+
+    __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_3, 500 + (Get_Shaker_PWM() * 2));
+    __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_4, Get_Fan_PWM() * 4);
+  }
+}
+
+void Move_Motors_To_Home(void)
+{
+  uint8_t change_direction = 0;
+
+  for (int i = 0; i < NB_MOTORS; i++)
+  {
+    if (motors[i].Needs_Homing > 0)
+    {
+      if (motors[i].Direction != GPIO_PIN_SET)
+      {
+        motors[i].Direction = GPIO_PIN_SET;
+
+        HAL_GPIO_WritePin(motors[i].Direction_GPIO.Port, motors[i].Direction_GPIO.Pin, motors[i].Direction);
+
+        change_direction = 1;
+      }
+    }
+  }
+
+  if (change_direction > 0)
+  {
+    Delay_Us(DIRECTION_DELAY);
+  }
+
+  uint8_t change_position = 0;
+
+  for (int i = 0; i < NB_MOTORS; i++)
+  {
+    if (motors[i].Needs_Homing > 0)
+    {
+      change_position = 1;
+
+      HAL_GPIO_WritePin(motors[i].Pulse_GPIO.Port, motors[i].Pulse_GPIO.Pin, GPIO_PIN_RESET);
+    }
+  }
+
+  if (change_position > 0)
+  {
+    Delay_Us(PULSE_DOWN_DELAY);
+
+    for (int i = 0; i < NB_MOTORS; i++)
+    {
+      if (motors[i].Needs_Homing > 0)
+      {
+        HAL_GPIO_WritePin(motors[i].Pulse_GPIO.Port, motors[i].Pulse_GPIO.Pin, GPIO_PIN_SET);
+      }
+    }
+
+    Delay_Us(HOME_STEP_DELAY);
+  }
+}
+
+void Move_Motors_To_Target(void)
+{
+  uint8_t change_direction = 0;
+
+  for (int i = 0; i < NB_MOTORS; i++)
+  {
+    if (motors[i].Position != motors[i].Target_Position)
+    {
+      const GPIO_PinState new_direction =
+       (motors[i].Position < motors[i].Target_Position) ? GPIO_PIN_RESET : GPIO_PIN_SET;
+
+      if (new_direction != motors[i].Direction)
+      {
+        motors[i].Direction = new_direction;
+
+        HAL_GPIO_WritePin(motors[i].Direction_GPIO.Port, motors[i].Direction_GPIO.Pin, motors[i].Direction);
+
+        change_direction = 1;
+      }
+    }
+  }
+
+  if (change_direction > 0)
+  {
+    Delay_Us(DIRECTION_DELAY);
+  }
+
+  uint8_t change_position = 0;
+
+  for (int i = 0; i < NB_MOTORS; i++)
+  {
+    if (motors[i].Position != motors[i].Target_Position)
+    {
+      change_position = 1;
+
+      HAL_GPIO_WritePin(motors[i].Pulse_GPIO.Port, motors[i].Pulse_GPIO.Pin, GPIO_PIN_RESET);
+    }
+  }
+
+  if (change_position > 0)
+  {
+    Delay_Us(PULSE_DOWN_DELAY);
+
+    for (int i = 0; i < NB_MOTORS; i++)
+    {
+      if (motors[i].Position != motors[i].Target_Position)
+      {
+        if (motors[i].Direction == GPIO_PIN_RESET)
+        {
+          motors[i].Position++;
+        }
+        else
+        {
+          motors[i].Position--;
+        }
+
+        HAL_GPIO_WritePin(motors[i].Pulse_GPIO.Port, motors[i].Pulse_GPIO.Pin, GPIO_PIN_SET);
+      }
+    }
+
+    if (m_speed != m_target_speed)
+    {
+      int error = m_target_speed - m_speed;
+
+      if (abs(error) < M_MAX_ACCELERATION)
+      {
+        m_speed = m_target_speed;
+      }
+      else
+      {
+        if (error > 0)
+        {
+          m_speed += M_MAX_ACCELERATION;
+        }
+        else
+        {
+          if (m_speed <= M_MAX_ACCELERATION)
+          {
+            m_speed = 0;
+          }
+          else
+          {
+            m_speed -= M_MAX_ACCELERATION;
+          }
+        }
+      }
+    }
+
+    if (m_speed > 0)
+    {
+      Delay_Us((uint16_t)(MIN(1000000 / (int)(m_speed), 65535)));
+    }
+  }
+  else
+  {
+    m_speed = 0;
+  }
+}
 
 void Delay_Us (uint16_t us)
 {

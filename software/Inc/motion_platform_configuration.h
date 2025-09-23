@@ -1,0 +1,19 @@
+/* Define to prevent recursive inclusion -------------------------------------*/
+#ifndef __MOTION_PLATFORM_CONFIGURATION_H__
+#define __MOTION_PLATFORM_CONFIGURATION_H__
+
+/* Private defines -----------------------------------------------------------*/
+#define NB_MOTORS 1
+
+#define MESSAGE_SIZE   (NB_MOTORS * 2) + 6
+#define MESSAGE_PERIOD 10000
+
+#define ROLL_PITCH_HEAVE_MOTORS_MIN_POS 0
+#define ROLL_PITCH_HEAVE_MOTORS_MAX_POS 64000
+
+#define SEAT_MOVER_MOTORS_MIN_POS 0
+#define SEAT_MOVER_MOTORS_MAX_POS 64000
+
+#define MAX_PWM 250
+
+#endif /* __MOTION_PLATFORM_CONFIGURATION_H__ */

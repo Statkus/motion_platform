@@ -52,17 +52,6 @@
 #define APP_TX_DATA_SIZE  2048
 /* USER CODE BEGIN EXPORTED_DEFINES */
 
-#define MESSAGE_SIZE   14
-#define MESSAGE_PERIOD 10000
-
-#define MIN_POS 0
-#define MAX_POS 64000
-
-#define MAX_PWM 250
-
-#define MIN_DELAY_BETWEEN_STEPS     40
-#define DEFAULT_DELAY_BETWEEN_STEPS 60
-
 /* USER CODE END EXPORTED_DEFINES */
 
 /**
@@ -122,10 +111,7 @@ uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len);
 
 uint8_t Is_New_Data(void);
 
-uint16_t Get_M1_Pos_Target(void);
-uint16_t Get_M2_Pos_Target(void);
-uint16_t Get_M3_Pos_Target(void);
-uint16_t Get_M4_Pos_Target(void);
+uint16_t Get_M_Pos_Target(uint8_t motor_index);
 
 uint8_t Get_Fan_PWM(void);
 uint8_t Get_Shaker_PWM(void);

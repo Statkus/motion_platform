@@ -23,6 +23,8 @@
 
 /* USER CODE BEGIN INCLUDE */
 
+#include "motion_platform_configuration.h"
+
 /* USER CODE END INCLUDE */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -95,18 +97,15 @@ uint8_t UserTxBufferFS[APP_TX_DATA_SIZE];
 
 /* USER CODE BEGIN PRIVATE_VARIABLES */
 
-uint8_t New_Data = 0;
+uint8_t new_data = 0;
 
-uint16_t M1_Pos_Target = MIN_POS;
-uint16_t M2_Pos_Target = MIN_POS;
-uint16_t M3_Pos_Target = MIN_POS;
-uint16_t M4_Pos_Target = MIN_POS;
+uint16_t m_pos_target[NB_MOTORS] = {0};
 
-uint8_t Fan_PWM    = 0;
-uint8_t Shaker_PWM = 0;
+uint8_t fan_pwm    = 0;
+uint8_t shaker_pwm = 0;
 
-uint8_t Max_Speed        = 250;
-uint8_t Max_Acceleration = 0;
+uint8_t max_speed        = 250;
+uint8_t max_acceleration = 0;
 
 /* USER CODE END PRIVATE_VARIABLES */
 
@@ -279,18 +278,24 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
 
   if (*Len >= MESSAGE_SIZE && Buf[0] == 'S' && Buf[MESSAGE_SIZE - 1] == 'E')
   {
-    M1_Pos_Target = MAX (MIN ((Buf[1] << 8) + Buf[2], MAX_POS), MIN_POS);
-    M2_Pos_Target = MAX (MIN ((Buf[3] << 8) + Buf[4], MAX_POS), MIN_POS);
-    M3_Pos_Target = MAX (MIN ((Buf[5] << 8) + Buf[6], MAX_POS), MIN_POS);
-    M4_Pos_Target = MAX (MIN ((Buf[7] << 8) + Buf[8], MAX_POS), MIN_POS);
+    for (int i = 0; i < NB_MOTORS; i++) {
+      m_pos_target[i] = (Buf[(i * 2) + 1] << 8) + Buf[(i * 2) + 2];
+    }
 
-    Fan_PWM    = MIN (Buf[9], MAX_PWM);
-    Shaker_PWM = MIN (Buf[10], MAX_PWM);
+    fan_pwm    = MIN (Buf[(NB_MOTORS * 2) + 1], MAX_PWM);
+    shaker_pwm = MIN (Buf[(NB_MOTORS * 2) + 2], MAX_PWM);
 
-    Max_Speed        = Buf[11];
-    Max_Acceleration = Buf[12];
+    max_speed        = Buf[(NB_MOTORS * 2) + 3];
+    max_acceleration = Buf[(NB_MOTORS * 2) + 4];
 
-    New_Data = 1;
+    new_data = 1;
+  }
+  // TODO: remove else after debug
+  else if (*Len > 2 && Buf[0] == 'T' && Buf[*Len - 1] == '\n')
+  {
+    m_pos_target[0] = atoi ((char*)&Buf[1]);
+
+    new_data = 1;
   }
 
   return (USBD_OK);
@@ -349,50 +354,35 @@ static int8_t CDC_TransmitCplt_FS(uint8_t *Buf, uint32_t *Len, uint8_t epnum)
 
 uint8_t Is_New_Data(void)
 {
-  const uint8_t Previous_New_Data = New_Data;
-  New_Data = 0;
+  const uint8_t previous_new_data = new_data;
+  new_data = 0;
 
-  return Previous_New_Data;
+  return previous_new_data;
 }
 
-uint16_t Get_M1_Pos_Target(void)
+uint16_t Get_M_Pos_Target(uint8_t motor_index)
 {
-  return M1_Pos_Target;
-}
-
-uint16_t Get_M2_Pos_Target(void)
-{
-  return M2_Pos_Target;
-}
-
-uint16_t Get_M3_Pos_Target(void)
-{
-  return M3_Pos_Target;
-}
-
-uint16_t Get_M4_Pos_Target(void)
-{
-  return M4_Pos_Target;
+  return m_pos_target[motor_index];
 }
 
 uint8_t Get_Fan_PWM(void)
 {
-  return Fan_PWM;
+  return fan_pwm;
 }
 
 uint8_t Get_Shaker_PWM(void)
 {
-  return Shaker_PWM;
+  return shaker_pwm;
 }
 
 uint8_t Get_Max_Speed(void)
 {
-  return Max_Speed;
+  return max_speed;
 }
 
 uint8_t Get_Max_Acceleration(void)
 {
-  return Max_Acceleration;
+  return max_acceleration;
 }
 
 /* USER CODE END PRIVATE_FUNCTIONS_IMPLEMENTATION */
