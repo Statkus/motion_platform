@@ -105,7 +105,7 @@ uint8_t fan_pwm    = 0;
 uint8_t shaker_pwm = 0;
 
 uint8_t max_speed        = 250;
-uint8_t max_acceleration = 0;
+uint8_t max_acceleration = 1;
 
 /* USER CODE END PRIVATE_VARIABLES */
 
