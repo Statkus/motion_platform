@@ -108,12 +108,9 @@ Motor motors[NB_MOTORS] = {
    .Min_Position_Calibrated = 0,
    .Max_Position_Calibrated = 0},
 };
-int32_t m_speed        = 1; // step/s
-int32_t m_target_speed = 0; // step/s
 
-// TODO: remove after correct value found and use define instead
-//uint16_t M_MAX_SPEED        = 25000;
-//uint16_t M_MAX_ACCELERATION = 100;
+int32_t m_speed        = 0; // step/s
+int32_t m_target_speed = 0; // step/s
 
 /* USER CODE END PV */
 
@@ -704,9 +701,6 @@ void Receive_Commands(void)
         max_dist = dist;
       }
     }
-
-    //M_MAX_SPEED        = (uint16_t)(Get_Max_Speed()) * 100;
-    //M_MAX_ACCELERATION = (uint16_t)(Get_Max_Acceleration()) * 100;
 
     m_target_speed = MAX(MIN((max_dist * 1000000) / MESSAGE_PERIOD, M_MAX_SPEED), -M_MAX_SPEED);
 

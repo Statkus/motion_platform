@@ -117,9 +117,6 @@ int32_t Get_M_Pos_Target(uint8_t motor_index);
 uint8_t Get_Fan_PWM(void);
 uint8_t Get_Shaker_PWM(void);
 
-uint8_t Get_Max_Speed(void);
-uint8_t Get_Max_Acceleration(void);
-
 /* USER CODE END EXPORTED_FUNCTIONS */
 
 /**

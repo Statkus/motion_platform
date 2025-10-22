@@ -5,7 +5,7 @@
 /* Exported defines ----------------------------------------------------------*/
 #define NB_MOTORS 1
 
-#define MESSAGE_SIZE   (NB_MOTORS * 2) + 6
+#define MESSAGE_SIZE   (NB_MOTORS * 2) + 4
 #define MESSAGE_PERIOD 10000 // us
 
 #define ROLL_PITCH_HEAVE_MOTORS_MIN_POS 0

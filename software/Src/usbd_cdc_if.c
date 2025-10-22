@@ -104,9 +104,6 @@ int32_t m_pos_target[NB_MOTORS] = {0};
 uint8_t fan_pwm    = 0;
 uint8_t shaker_pwm = 0;
 
-uint8_t max_speed        = 250;
-uint8_t max_acceleration = 1;
-
 /* USER CODE END PRIVATE_VARIABLES */
 
 /**
@@ -285,9 +282,6 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
     fan_pwm    = MIN (Buf[(NB_MOTORS * 2) + 1], MAX_PWM);
     shaker_pwm = MIN (Buf[(NB_MOTORS * 2) + 2], MAX_PWM);
 
-    max_speed        = Buf[(NB_MOTORS * 2) + 3];
-    max_acceleration = Buf[(NB_MOTORS * 2) + 4];
-
     new_data = 1;
   }
   // TODO: remove else after debug
@@ -373,16 +367,6 @@ uint8_t Get_Fan_PWM(void)
 uint8_t Get_Shaker_PWM(void)
 {
   return shaker_pwm;
-}
-
-uint8_t Get_Max_Speed(void)
-{
-  return max_speed;
-}
-
-uint8_t Get_Max_Acceleration(void)
-{
-  return max_acceleration;
 }
 
 /* USER CODE END PRIVATE_FUNCTIONS_IMPLEMENTATION */
