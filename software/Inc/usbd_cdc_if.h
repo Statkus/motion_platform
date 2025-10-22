@@ -112,7 +112,7 @@ uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len);
 
 uint8_t Is_New_Data(void);
 
-uint16_t Get_M_Pos_Target(uint8_t motor_index);
+int32_t Get_M_Pos_Target(uint8_t motor_index);
 
 uint8_t Get_Fan_PWM(void);
 uint8_t Get_Shaker_PWM(void);

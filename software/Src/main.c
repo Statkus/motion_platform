@@ -44,14 +44,16 @@ typedef struct
   GPIO Ready_GPIO;
   GPIO Torque_Alarm_GPIO;
 
-  uint16_t Position;
-  uint16_t Min_Position;
-  uint16_t Max_Position;
-  uint16_t Target_Position;
+  int32_t Position;
+  uint8_t Position_Zero_Centered;
+  int32_t Min_Position;
+  int32_t Max_Position;
+  int32_t Target_Position;
   GPIO_PinState Direction;
 
-  uint8_t Needs_Min_Position_Calibration;
-  uint8_t Needs_Max_Position_Calibration;
+  uint8_t Needs_Calibration;
+  uint8_t Min_Position_Calibrated;
+  uint8_t Max_Position_Calibrated;
 } Motor;
 
 typedef enum
@@ -95,22 +97,23 @@ Motor motors[NB_MOTORS] = {
     {.Port = M1_TORQUE_ALARM_GPIO_Port,
      .Pin  = M1_TORQUE_ALARM_Pin},
 
-   .Position        = 0,
-   .Min_Position    = 0,
-   .Max_Position    = 0,
-   .Target_Position = 0,
-   .Direction       = GPIO_PIN_RESET,
+   .Position               = 0,
+   .Position_Zero_Centered = M1_POSITION_ZERO_CENTERED,
+   .Min_Position           = M1_MIN_POSITION,
+   .Max_Position           = M1_MAX_POSITION,
+   .Target_Position        = 0,
+   .Direction              = GPIO_PIN_RESET,
 
-   .Needs_Min_Position_Calibration = 1,
-   .Needs_Max_Position_Calibration = 1},
+   .Needs_Calibration       = M1_NEEDS_CALIBRATION,
+   .Min_Position_Calibrated = 0,
+   .Max_Position_Calibrated = 0},
 };
-
 int32_t m_speed        = 1; // step/s
 int32_t m_target_speed = 0; // step/s
 
 // TODO: remove after correct value found and use define instead
-uint16_t M_MAX_SPEED        = 25000;
-uint16_t M_MAX_ACCELERATION = 100;
+//uint16_t M_MAX_SPEED        = 25000;
+//uint16_t M_MAX_ACCELERATION = 100;
 
 /* USER CODE END PV */
 
@@ -246,14 +249,14 @@ int main(void)
 
         for (int i = 0; i < NB_MOTORS; i++)
         {
-          if (motors[i].Needs_Min_Position_Calibration > 0)
+          if (motors[i].Needs_Calibration > 0 && motors[i].Min_Position_Calibrated == 0)
           {
             if (HAL_GPIO_ReadPin(motors[i].Torque_Alarm_GPIO.Port, motors[i].Torque_Alarm_GPIO.Pin) == GPIO_PIN_RESET)
             {
-              motors[i].Position                       = 0;
-              motors[i].Min_Position                   = MIN_MAX_SAFETY_BUFFER;
-              motors[i].Target_Position                = motors[i].Min_Position;
-              motors[i].Needs_Min_Position_Calibration = 0;
+              motors[i].Min_Position_Calibrated = 1;
+              motors[i].Position                = 0;
+              motors[i].Min_Position            = MIN_MAX_SAFETY_BUFFER;
+              motors[i].Target_Position         = motors[i].Min_Position;
             }
             else
             {
@@ -280,13 +283,26 @@ int main(void)
 
         for (int i = 0; i < NB_MOTORS; i++)
         {
-          if (motors[i].Needs_Max_Position_Calibration > 0)
+          if (motors[i].Needs_Calibration > 0 && motors[i].Max_Position_Calibrated == 0)
           {
             if (HAL_GPIO_ReadPin(motors[i].Torque_Alarm_GPIO.Port, motors[i].Torque_Alarm_GPIO.Pin) == GPIO_PIN_RESET && motors[i].Position > motors[i].Min_Position)
             {
-              motors[i].Max_Position                   = motors[i].Position - MIN_MAX_SAFETY_BUFFER;
-              motors[i].Target_Position                = motors[i].Min_Position + (motors[i].Max_Position - motors[i].Min_Position) / 2;
-              motors[i].Needs_Max_Position_Calibration = 0;
+              motors[i].Max_Position_Calibrated = 1;
+              motors[i].Max_Position            = motors[i].Position - MIN_MAX_SAFETY_BUFFER;
+
+              if (motors[i].Position_Zero_Centered > 0)
+              {
+                // Center positions to 0
+                motors[i].Min_Position    = (motors[i].Min_Position - motors[i].Max_Position) / 2;
+                motors[i].Max_Position    = -motors[i].Min_Position;
+                motors[i].Position        = motors[i].Max_Position + MIN_MAX_SAFETY_BUFFER;
+
+                motors[i].Target_Position = 0;
+              }
+              else
+              {
+                motors[i].Target_Position = (motors[i].Max_Position - motors[i].Min_Position) / 2;
+              }
 
               m_target_speed = M_MAX_SPEED / 2;
             }
@@ -665,15 +681,23 @@ void Receive_Commands(void)
   {
     HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
 
-    int32_t dist = 0;
-    int32_t max_dist  = 0;
+    int32_t pos_target = 0;
+    int32_t dist       = 0;
+    int32_t max_dist   = 0;
 
     for (int i = 0; i < NB_MOTORS; i++)
     {
-      motors[i].Target_Position =
-       MIN(MAX(Get_M_Pos_Target(i), motors[i].Min_Position), motors[i].Max_Position);
+      pos_target = Get_M_Pos_Target(i);
 
-      dist = (uint32_t)(motors[i].Target_Position) - (uint32_t)(motors[i].Position);
+      if (motors[i].Position_Zero_Centered > 0)
+      {
+        pos_target -= 32767;
+      }
+
+      motors[i].Target_Position =
+       MIN(MAX(pos_target, motors[i].Min_Position), motors[i].Max_Position);
+
+      dist = motors[i].Target_Position - motors[i].Position;
 
       if (abs(dist) > abs(max_dist))
       {
@@ -681,13 +705,10 @@ void Receive_Commands(void)
       }
     }
 
-    M_MAX_SPEED        = (uint16_t)(Get_Max_Speed()) * 100;
-    M_MAX_ACCELERATION = (uint16_t)(Get_Max_Acceleration()) * 100;
+    //M_MAX_SPEED        = (uint16_t)(Get_Max_Speed()) * 100;
+    //M_MAX_ACCELERATION = (uint16_t)(Get_Max_Acceleration()) * 100;
 
-    if (max_dist > 0)
-    {
-      m_target_speed = MAX(MIN((max_dist * 1000000) / MESSAGE_PERIOD, M_MAX_SPEED), -M_MAX_SPEED);
-    }
+    m_target_speed = MAX(MIN((max_dist * 1000000) / MESSAGE_PERIOD, M_MAX_SPEED), -M_MAX_SPEED);
 
     __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_3, 500 + (Get_Shaker_PWM() * 2));
     __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_4, Get_Fan_PWM() * 4);
@@ -700,7 +721,7 @@ void Move_Motors_To_Min_Position(void)
 
   for (int i = 0; i < NB_MOTORS; i++)
   {
-    if (motors[i].Needs_Min_Position_Calibration > 0)
+    if (motors[i].Needs_Calibration > 0 && motors[i].Min_Position_Calibrated == 0)
     {
       if (motors[i].Direction != GPIO_PIN_SET)
       {
@@ -722,7 +743,7 @@ void Move_Motors_To_Min_Position(void)
 
   for (int i = 0; i < NB_MOTORS; i++)
   {
-    if (motors[i].Needs_Min_Position_Calibration > 0)
+    if (motors[i].Needs_Calibration > 0 && motors[i].Min_Position_Calibrated == 0)
     {
       change_position = 1;
 
@@ -736,7 +757,7 @@ void Move_Motors_To_Min_Position(void)
 
     for (int i = 0; i < NB_MOTORS; i++)
     {
-      if (motors[i].Needs_Min_Position_Calibration > 0)
+      if (motors[i].Needs_Calibration > 0 && motors[i].Min_Position_Calibrated == 0)
       {
         HAL_GPIO_WritePin(motors[i].Pulse_GPIO.Port, motors[i].Pulse_GPIO.Pin, GPIO_PIN_SET);
       }
@@ -752,7 +773,7 @@ void Move_Motors_To_Max_Position(void)
 
   for (int i = 0; i < NB_MOTORS; i++)
   {
-    if (motors[i].Needs_Max_Position_Calibration > 0)
+    if (motors[i].Needs_Calibration > 0 && motors[i].Max_Position_Calibrated == 0)
     {
       if (motors[i].Direction != GPIO_PIN_RESET)
       {
@@ -774,7 +795,7 @@ void Move_Motors_To_Max_Position(void)
 
   for (int i = 0; i < NB_MOTORS; i++)
   {
-    if (motors[i].Needs_Max_Position_Calibration > 0)
+    if (motors[i].Needs_Calibration > 0 && motors[i].Max_Position_Calibrated == 0)
     {
       change_position = 1;
 
@@ -788,7 +809,7 @@ void Move_Motors_To_Max_Position(void)
 
     for (int i = 0; i < NB_MOTORS; i++)
     {
-      if (motors[i].Needs_Max_Position_Calibration > 0)
+      if (motors[i].Needs_Calibration > 0 && motors[i].Max_Position_Calibrated == 0)
       {
         if (motors[i].Direction == GPIO_PIN_RESET)
         {

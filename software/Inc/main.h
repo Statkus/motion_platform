@@ -127,10 +127,10 @@ void Error_Handler(void);
 #define CALIBRATION_STEP_DELAY_US  400
 #define MAX_SPEED_DELAY_US         1000
 
-#define MIN_MAX_SAFETY_BUFFER 500
+#define MIN_MAX_SAFETY_BUFFER 500 // step
 
-//#define M_MAX_SPEED        25000 // step/s
-//#define M_MAX_ACCELERATION 100   // step/s^2
+#define M_MAX_SPEED        25000 // step/s
+#define M_MAX_ACCELERATION 100   // step/s^2
 
 /* USER CODE END Private defines */
 

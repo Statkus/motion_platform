@@ -99,7 +99,7 @@ uint8_t UserTxBufferFS[APP_TX_DATA_SIZE];
 
 uint8_t new_data = 0;
 
-uint16_t m_pos_target[NB_MOTORS] = {0};
+int32_t m_pos_target[NB_MOTORS] = {0};
 
 uint8_t fan_pwm    = 0;
 uint8_t shaker_pwm = 0;
@@ -360,7 +360,7 @@ uint8_t Is_New_Data(void)
   return previous_new_data;
 }
 
-uint16_t Get_M_Pos_Target(uint8_t motor_index)
+int32_t Get_M_Pos_Target(uint8_t motor_index)
 {
   return m_pos_target[motor_index];
 }
