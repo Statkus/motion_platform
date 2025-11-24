@@ -84,6 +84,7 @@ TIM_HandleTypeDef htim4;
 /* USER CODE BEGIN PV */
 
 Motor motors[NB_MOTORS] = {
+  // Motor 1
   {.Pulse_GPIO =
     {.Port = M1_PUL_GPIO_Port,
      .Pin  = M1_PUL_Pin},
@@ -105,6 +106,131 @@ Motor motors[NB_MOTORS] = {
    .Direction              = GPIO_PIN_RESET,
 
    .Needs_Calibration       = M1_NEEDS_CALIBRATION,
+   .Min_Position_Calibrated = 0,
+   .Max_Position_Calibrated = 0},
+
+  // Motor 2
+  {.Pulse_GPIO =
+    {.Port = M2_PUL_GPIO_Port,
+     .Pin  = M2_PUL_Pin},
+   .Direction_GPIO =
+    {.Port = M2_DIR_GPIO_Port,
+     .Pin  = M2_DIR_Pin},
+   .Ready_GPIO =
+    {.Port = M2_READY_GPIO_Port,
+     .Pin  = M2_READY_Pin},
+   .Torque_Alarm_GPIO =
+    {.Port = M2_TORQUE_ALARM_GPIO_Port,
+     .Pin  = M2_TORQUE_ALARM_Pin},
+
+   .Position               = 0,
+   .Position_Zero_Centered = M2_POSITION_ZERO_CENTERED,
+   .Min_Position           = M2_MIN_POSITION,
+   .Max_Position           = M2_MAX_POSITION,
+   .Target_Position        = 0,
+   .Direction              = GPIO_PIN_RESET,
+
+   .Needs_Calibration       = M2_NEEDS_CALIBRATION,
+   .Min_Position_Calibrated = 0,
+   .Max_Position_Calibrated = 0},
+
+  // Motor 3
+  {.Pulse_GPIO =
+    {.Port = M3_PUL_GPIO_Port,
+     .Pin  = M3_PUL_Pin},
+   .Direction_GPIO =
+    {.Port = M3_DIR_GPIO_Port,
+     .Pin  = M3_DIR_Pin},
+   .Ready_GPIO =
+    {.Port = M3_READY_GPIO_Port,
+     .Pin  = M3_READY_Pin},
+   .Torque_Alarm_GPIO =
+    {.Port = M3_TORQUE_ALARM_GPIO_Port,
+     .Pin  = M3_TORQUE_ALARM_Pin},
+
+   .Position               = 0,
+   .Position_Zero_Centered = M3_POSITION_ZERO_CENTERED,
+   .Min_Position           = M3_MIN_POSITION,
+   .Max_Position           = M3_MAX_POSITION,
+   .Target_Position        = 0,
+   .Direction              = GPIO_PIN_RESET,
+
+   .Needs_Calibration       = M3_NEEDS_CALIBRATION,
+   .Min_Position_Calibrated = 0,
+   .Max_Position_Calibrated = 0},
+
+  // Motor 4
+  {.Pulse_GPIO =
+    {.Port = M4_PUL_GPIO_Port,
+     .Pin  = M4_PUL_Pin},
+   .Direction_GPIO =
+    {.Port = M4_DIR_GPIO_Port,
+     .Pin  = M4_DIR_Pin},
+   .Ready_GPIO =
+    {.Port = M4_READY_GPIO_Port,
+     .Pin  = M4_READY_Pin},
+   .Torque_Alarm_GPIO =
+    {.Port = M4_TORQUE_ALARM_GPIO_Port,
+     .Pin  = M4_TORQUE_ALARM_Pin},
+
+   .Position               = 0,
+   .Position_Zero_Centered = M4_POSITION_ZERO_CENTERED,
+   .Min_Position           = M4_MIN_POSITION,
+   .Max_Position           = M4_MAX_POSITION,
+   .Target_Position        = 0,
+   .Direction              = GPIO_PIN_RESET,
+
+   .Needs_Calibration       = M4_NEEDS_CALIBRATION,
+   .Min_Position_Calibrated = 0,
+   .Max_Position_Calibrated = 0},
+
+  // Motor 5
+  {.Pulse_GPIO =
+    {.Port = M5_PUL_GPIO_Port,
+     .Pin  = M5_PUL_Pin},
+   .Direction_GPIO =
+    {.Port = M5_DIR_GPIO_Port,
+     .Pin  = M5_DIR_Pin},
+   .Ready_GPIO =
+    {.Port = M5_READY_GPIO_Port,
+     .Pin  = M5_READY_Pin},
+   .Torque_Alarm_GPIO =
+    {.Port = M5_TORQUE_ALARM_GPIO_Port,
+     .Pin  = M5_TORQUE_ALARM_Pin},
+
+   .Position               = 0,
+   .Position_Zero_Centered = M5_POSITION_ZERO_CENTERED,
+   .Min_Position           = M5_MIN_POSITION,
+   .Max_Position           = M5_MAX_POSITION,
+   .Target_Position        = 0,
+   .Direction              = GPIO_PIN_RESET,
+
+   .Needs_Calibration       = M5_NEEDS_CALIBRATION,
+   .Min_Position_Calibrated = 0,
+   .Max_Position_Calibrated = 0},
+
+  // Motor 6
+  {.Pulse_GPIO =
+    {.Port = M6_PUL_GPIO_Port,
+     .Pin  = M6_PUL_Pin},
+   .Direction_GPIO =
+    {.Port = M6_DIR_GPIO_Port,
+     .Pin  = M6_DIR_Pin},
+   .Ready_GPIO =
+    {.Port = M6_READY_GPIO_Port,
+     .Pin  = M6_READY_Pin},
+   .Torque_Alarm_GPIO =
+    {.Port = M6_TORQUE_ALARM_GPIO_Port,
+     .Pin  = M6_TORQUE_ALARM_Pin},
+
+   .Position               = 0,
+   .Position_Zero_Centered = M6_POSITION_ZERO_CENTERED,
+   .Min_Position           = M6_MIN_POSITION,
+   .Max_Position           = M6_MAX_POSITION,
+   .Target_Position        = 0,
+   .Direction              = GPIO_PIN_RESET,
+
+   .Needs_Calibration       = M6_NEEDS_CALIBRATION,
    .Min_Position_Calibrated = 0,
    .Max_Position_Calibrated = 0},
 };
@@ -198,16 +324,6 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-    //if (HAL_GPIO_ReadPin(BUTTON_GPIO_Port, BUTTON_Pin) == GPIO_PIN_SET)
-    //if (HAL_GPIO_ReadPin(motors[0].Torque_Alarm_GPIO.Port, motors[0].Torque_Alarm_GPIO.Pin) == GPIO_PIN_RESET)
-    //{
-    //  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET);
-    //}
-    //else
-    //{
-    //  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
-    //}
-
     switch (state)
     {
       case Initialization:
@@ -289,7 +405,6 @@ int main(void)
 
               if (motors[i].Position_Zero_Centered > 0)
               {
-                // Center positions to 0
                 motors[i].Min_Position    = (motors[i].Min_Position - motors[i].Max_Position) / 2;
                 motors[i].Max_Position    = -motors[i].Min_Position;
                 motors[i].Position        = motors[i].Max_Position + MIN_MAX_SAFETY_BUFFER;
@@ -702,7 +817,7 @@ void Receive_Commands(void)
       }
     }
 
-    m_target_speed = MAX(MIN((max_dist * 1000000) / MESSAGE_PERIOD, M_MAX_SPEED), -M_MAX_SPEED);
+    m_target_speed = MAX(MIN((max_dist * 1000000) / MESSAGE_PERIOD_US, M_MAX_SPEED), -M_MAX_SPEED);
 
     __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_3, 500 + (Get_Shaker_PWM() * 2));
     __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_4, Get_Fan_PWM() * 4);

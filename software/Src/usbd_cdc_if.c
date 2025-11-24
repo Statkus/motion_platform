@@ -273,7 +273,7 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
   USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
   USBD_CDC_ReceivePacket(&hUsbDeviceFS);
 
-  if (*Len >= MESSAGE_SIZE && Buf[0] == 'S' && Buf[MESSAGE_SIZE - 1] == 'E')
+  if (*Len == MESSAGE_SIZE && Buf[0] == 'S' && Buf[MESSAGE_SIZE - 1] == 'E')
   {
     for (int i = 0; i < NB_MOTORS; i++) {
       m_pos_target[i] = (Buf[(i * 2) + 1] << 8) + Buf[(i * 2) + 2];
@@ -284,13 +284,12 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
 
     new_data = 1;
   }
-  // TODO: remove else after debug
-  else if (*Len > 2 && Buf[0] == 'T' && Buf[*Len - 1] == '\n')
-  {
-    m_pos_target[0] = atoi ((char*)&Buf[1]);
+  //else if (*Len > 2 && Buf[0] == 'T' && Buf[*Len - 1] == '\n')
+  //{
+  //  m_pos_target[0] = atoi ((char*)&Buf[1]);
 
-    new_data = 1;
-  }
+  //  new_data = 1;
+  //}
 
   return (USBD_OK);
   /* USER CODE END 6 */
