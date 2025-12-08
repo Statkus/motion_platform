@@ -241,7 +241,7 @@
   <RIG>
     <Type>Mover.Rigs.LinearFour</Type>
     <Name>RIG :: 3DOF WITH 4 LINEAR</Name>
-    <Location>710,184</Location>
+    <Location>704,409</Location>
     <Size>1102,556</Size>
     <Visible>False</Visible>
     <CONTROLS>
@@ -337,6 +337,64 @@
       <HSActuator>0;0</HSActuator>
     </CONTROLS>
   </DIRECT>
+  <DIRECT>
+    <Type>Mover.Directs.SimpleDirect</Type>
+    <Name>SEATMOVER::SURGE</Name>
+    <Location>716,38</Location>
+    <Size>880,450</Size>
+    <Visible>True</Visible>
+    <CONTROLS>
+      <NUDActuatorsBitOutput>16</NUDActuatorsBitOutput>
+      <NUDFrom>-25.0</NUDFrom>
+      <NUDTo>25.0</NUDTo>
+      <NUDDefault>0</NUDDefault>
+      <AFCFilter.txtFilterText>ADD(EMALP(LOGISTIC(MUL(VALUE;0.300);5;1);300);-3)</AFCFilter.txtFilterText>
+      <AFCActuatorFilter.txtFilterText>VALUE</AFCActuatorFilter.txtFilterText>
+      <TXTKey>SeatMoverSurge</TXTKey>
+      <TXTUniqueName>21</TXTUniqueName>
+      <TXTName>SEATMOVER::SURGE</TXTName>
+      <SHActuatorValues.chkShowHide>True</SHActuatorValues.chkShowHide>
+      <SHInputSelection.chkShowHide>True</SHInputSelection.chkShowHide>
+      <CHKTopMost>False</CHKTopMost>
+      <ddlValue>Longitudinal acceleration (m/s²)</ddlValue>
+      <TVInputSelection>
+        <item>SOURCE :: JOYSTICKS</item>
+        <item>SOURCE :: ASSETTO CORSA (MMF)</item>
+        <item>SOURCE :: DIRT RALLY 2 (UDP)</item>
+        <item>SOURCE :: BEAMNG.DRIVE (UDP)</item>
+      </TVInputSelection>
+      <HSActuator>-3;-3</HSActuator>
+    </CONTROLS>
+  </DIRECT>
+  <DIRECT>
+    <Type>Mover.Directs.SimpleDirect</Type>
+    <Name>SEATMOVER::SWAY</Name>
+    <Location>716,517</Location>
+    <Size>880,450</Size>
+    <Visible>True</Visible>
+    <CONTROLS>
+      <NUDActuatorsBitOutput>16</NUDActuatorsBitOutput>
+      <NUDFrom>-25.0</NUDFrom>
+      <NUDTo>25.0</NUDTo>
+      <NUDDefault>0</NUDDefault>
+      <AFCFilter.txtFilterText>EMALP(LOGISTIC(MUL(VALUE;-0.500);5;1);300)</AFCFilter.txtFilterText>
+      <AFCActuatorFilter.txtFilterText>VALUE</AFCActuatorFilter.txtFilterText>
+      <TXTKey>SeatMoverSway</TXTKey>
+      <TXTUniqueName>22</TXTUniqueName>
+      <TXTName>SEATMOVER::SWAY</TXTName>
+      <SHActuatorValues.chkShowHide>True</SHActuatorValues.chkShowHide>
+      <SHInputSelection.chkShowHide>True</SHInputSelection.chkShowHide>
+      <CHKTopMost>False</CHKTopMost>
+      <ddlValue>Lateral acceleration (m/s²)</ddlValue>
+      <TVInputSelection>
+        <item>SOURCE :: JOYSTICKS</item>
+        <item>SOURCE :: ASSETTO CORSA (MMF)</item>
+        <item>SOURCE :: DIRT RALLY 2 (UDP)</item>
+        <item>SOURCE :: BEAMNG.DRIVE (UDP)</item>
+      </TVInputSelection>
+      <HSActuator>-5.68183694421758E-83;-5.68183694421758E-83</HSActuator>
+    </CONTROLS>
+  </DIRECT>
   <OUTPUT>
     <Type>Mover.Outputs.Serial</Type>
     <Name>OUTPUT :: SERIAL</Name>
@@ -348,7 +406,7 @@
       <NUDStartTime>1490</NUDStartTime>
       <NUDStopTime>0</NUDStopTime>
       <TXTStopString></TXTStopString>
-      <TXTSendString>S&lt;Axis1a&gt;&lt;Axis2a&gt;&lt;Axis3a&gt;&lt;Axis4a&gt;&lt;Fan&gt;&lt;0&gt;&lt;250&gt;&lt;50&gt;E</TXTSendString>
+      <TXTSendString>S&lt;Axis1a&gt;&lt;Axis2a&gt;&lt;Axis3a&gt;&lt;Axis4a&gt;&lt;SeatMoverSurge&gt;&lt;SeatMoverSway&gt;&lt;Fan&gt;&lt;0&gt;E</TXTSendString>
       <TXTStartString></TXTStartString>
       <TXTUniqueName>6</TXTUniqueName>
       <TXTInputString></TXTInputString>
@@ -361,7 +419,7 @@
       <DDLStopBits>1</DDLStopBits>
       <DDLDataBits>8</DDLDataBits>
       <DDLBaudRate>921600</DDLBaudRate>
-      <DDLPort>COM5</DDLPort>
+      <DDLPort>COM3</DDLPort>
       <DDLTypeOfOutput>Binary</DDLTypeOfOutput>
       <TVInputSelection />
     </CONTROLS>
@@ -385,7 +443,7 @@
       <TXTName>OUTPUT :: MMF</TXTName>
       <SHDebug.chkShowHide>True</SHDebug.chkShowHide>
       <SHInputSelection.chkShowHide>True</SHInputSelection.chkShowHide>
-      <CHKAutoConnect>True</CHKAutoConnect>
+      <CHKAutoConnect>False</CHKAutoConnect>
       <CHKTopMost>False</CHKTopMost>
       <DDLTypeOfOutput>Binary</DDLTypeOfOutput>
       <TVInputSelection />
@@ -427,15 +485,17 @@
     </CONTROLS>
   </VIEWER_GRAPHIC>
   <Z_ORDER>
-    <item>11</item>
     <item>7</item>
+    <item>20</item>
     <item>12</item>
+    <item>11</item>
+    <item>3</item>
+    <item>13</item>
     <item>19</item>
     <item>14</item>
     <item>18</item>
-    <item>3</item>
-    <item>13</item>
-    <item>20</item>
+    <item>21</item>
+    <item>22</item>
     <item>16</item>
     <item>6</item>
   </Z_ORDER>
