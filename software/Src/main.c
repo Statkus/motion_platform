@@ -84,7 +84,7 @@ TIM_HandleTypeDef htim4;
 /* USER CODE BEGIN PV */
 
 Motor motors[NB_MOTORS] = {
-  // Motor 1
+  /* Motor 1 -----------------------------------------------------------------*/
   {.Pulse_GPIO =
     {.Port = M1_PUL_GPIO_Port,
      .Pin  = M1_PUL_Pin},
@@ -109,7 +109,7 @@ Motor motors[NB_MOTORS] = {
    .Min_Position_Calibrated = 0,
    .Max_Position_Calibrated = 0},
 
-  // Motor 2
+  /* Motor 2 -----------------------------------------------------------------*/
   {.Pulse_GPIO =
     {.Port = M2_PUL_GPIO_Port,
      .Pin  = M2_PUL_Pin},
@@ -134,7 +134,7 @@ Motor motors[NB_MOTORS] = {
    .Min_Position_Calibrated = 0,
    .Max_Position_Calibrated = 0},
 
-  // Motor 3
+  /* Motor 3 -----------------------------------------------------------------*/
   {.Pulse_GPIO =
     {.Port = M3_PUL_GPIO_Port,
      .Pin  = M3_PUL_Pin},
@@ -159,7 +159,7 @@ Motor motors[NB_MOTORS] = {
    .Min_Position_Calibrated = 0,
    .Max_Position_Calibrated = 0},
 
-  // Motor 4
+  /* Motor 4 -----------------------------------------------------------------*/
   {.Pulse_GPIO =
     {.Port = M4_PUL_GPIO_Port,
      .Pin  = M4_PUL_Pin},
@@ -184,7 +184,7 @@ Motor motors[NB_MOTORS] = {
    .Min_Position_Calibrated = 0,
    .Max_Position_Calibrated = 0},
 
-  // Motor 5
+  /* Motor 5 -----------------------------------------------------------------*/
   {.Pulse_GPIO =
     {.Port = M5_PUL_GPIO_Port,
      .Pin  = M5_PUL_Pin},
@@ -209,7 +209,7 @@ Motor motors[NB_MOTORS] = {
    .Min_Position_Calibrated = 0,
    .Max_Position_Calibrated = 0},
 
-  // Motor 6
+  /* Motor 6 -----------------------------------------------------------------*/
   {.Pulse_GPIO =
     {.Port = M6_PUL_GPIO_Port,
      .Pin  = M6_PUL_Pin},

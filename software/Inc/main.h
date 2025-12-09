@@ -122,15 +122,15 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN Private defines */
 
-#define DIRECTION_DELAY_US         10
-#define PULSE_DOWN_DELAY_US        10
-#define CALIBRATION_STEP_DELAY_US  400
-#define MAX_SPEED_DELAY_US         1000
+#define DIRECTION_DELAY_US        5
+#define PULSE_DOWN_DELAY_US       5
+#define CALIBRATION_STEP_DELAY_US 200
+#define MAX_SPEED_DELAY_US        1000
 
-#define MIN_MAX_SAFETY_BUFFER 500 // step
+#define MIN_MAX_SAFETY_BUFFER 1000 // step
 
-#define M_MAX_SPEED        25000 // step/s
-#define M_MAX_ACCELERATION 100   // step/s^2
+#define M_MAX_SPEED        40000 // step/s     // 40000 pour un comportement comme avant
+#define M_MAX_ACCELERATION 2000  // step/s^2
 
 /* USER CODE END Private defines */
 
