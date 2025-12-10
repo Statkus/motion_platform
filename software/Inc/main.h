@@ -113,10 +113,10 @@ void Error_Handler(void);
 #define M6_TORQUE_ALARM_GPIO_Port GPIOB
 #define M6_DIR_Pin GPIO_PIN_13
 #define M6_DIR_GPIO_Port GPIOB
-#define SHAKER_PWM_Pin GPIO_PIN_12
-#define SHAKER_PWM_GPIO_Port GPIOD
-#define FAN_PWM_Pin GPIO_PIN_13
-#define FAN_PWM_GPIO_Port GPIOD
+#define SHAKER_PWM_Pin GPIO_PIN_14
+#define SHAKER_PWM_GPIO_Port GPIOB
+#define FAN_PWM_Pin GPIO_PIN_15
+#define FAN_PWM_GPIO_Port GPIOB
 #define SPI_FLASH_CS_Pin GPIO_PIN_6
 #define SPI_FLASH_CS_GPIO_Port GPIOD
 
