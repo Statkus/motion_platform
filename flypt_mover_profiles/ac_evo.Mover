@@ -183,7 +183,7 @@
       <pnlYaw.nudYawInGain>0</pnlYaw.nudYawInGain>
       <pnlYaw.nudYawRange>10</pnlYaw.nudYawRange>
       <pnlRoll.nudRollOutGain>0.75</pnlRoll.nudRollOutGain>
-      <pnlRoll.nudRollInGain>1</pnlRoll.nudRollInGain>
+      <pnlRoll.nudRollInGain>-1.000</pnlRoll.nudRollInGain>
       <pnlRoll.nudRollRange>16.39</pnlRoll.nudRollRange>
       <pnlPitch.nudPitchOutGain>0.75</pnlPitch.nudPitchOutGain>
       <pnlPitch.nudPitchInGain>1</pnlPitch.nudPitchInGain>
@@ -313,20 +313,20 @@
   <DIRECT>
     <Type>Mover.Directs.SimpleDirect</Type>
     <Name>Fan</Name>
-    <Location>714,573</Location>
-    <Size>880,375</Size>
+    <Location>713,87</Location>
+    <Size>880,450</Size>
     <Visible>False</Visible>
     <CONTROLS>
       <NUDActuatorsBitOutput>8</NUDActuatorsBitOutput>
       <NUDFrom>0</NUDFrom>
       <NUDTo>100</NUDTo>
       <NUDDefault>0</NUDDefault>
-      <AFCFilter.txtFilterText>ADD(REMAP(CROP(MUL(VALUE;3.6);50;200);50;200;0.00;70);30)</AFCFilter.txtFilterText>
+      <AFCFilter.txtFilterText>ADD(REMAP(CROP(MUL(VALUE;3.600);50;200);50;200;0;70);30)</AFCFilter.txtFilterText>
       <AFCActuatorFilter.txtFilterText>VALUE</AFCActuatorFilter.txtFilterText>
       <TXTKey>Fan</TXTKey>
       <TXTUniqueName>19</TXTUniqueName>
       <TXTName>Fan</TXTName>
-      <SHActuatorValues.chkShowHide>False</SHActuatorValues.chkShowHide>
+      <SHActuatorValues.chkShowHide>True</SHActuatorValues.chkShowHide>
       <SHInputSelection.chkShowHide>True</SHInputSelection.chkShowHide>
       <CHKTopMost>False</CHKTopMost>
       <ddlValue>Speed (m/s)</ddlValue>
@@ -397,6 +397,35 @@
       <HSActuator>0;0</HSActuator>
     </CONTROLS>
   </DIRECT>
+  <DIRECT>
+    <Type>Mover.Directs.SimpleDirect</Type>
+    <Name>SIMPLE DIRECT</Name>
+    <Location>715,561</Location>
+    <Size>880,450</Size>
+    <Visible>False</Visible>
+    <CONTROLS>
+      <NUDActuatorsBitOutput>8</NUDActuatorsBitOutput>
+      <NUDFrom>0</NUDFrom>
+      <NUDTo>100</NUDTo>
+      <NUDDefault>0</NUDDefault>
+      <AFCFilter.txtFilterText>REMAP(ABS(VALUE);0;0.1;0;100)</AFCFilter.txtFilterText>
+      <AFCActuatorFilter.txtFilterText>VALUE</AFCActuatorFilter.txtFilterText>
+      <TXTKey>BrakeShaker</TXTKey>
+      <TXTUniqueName>23</TXTUniqueName>
+      <TXTName>SIMPLE DIRECT</TXTName>
+      <SHActuatorValues.chkShowHide>True</SHActuatorValues.chkShowHide>
+      <SHInputSelection.chkShowHide>True</SHInputSelection.chkShowHide>
+      <CHKTopMost>False</CHKTopMost>
+      <ddlValue>ABS</ddlValue>
+      <TVInputSelection>
+        <item>SOURCE :: JOYSTICKS</item>
+        <item>SOURCE :: ASSETTO CORSA (MMF)</item>
+        <item>SOURCE :: DIRT RALLY 2 (UDP)</item>
+        <item>SOURCE :: BEAMNG.DRIVE (UDP)</item>
+      </TVInputSelection>
+      <HSActuator>0;0</HSActuator>
+    </CONTROLS>
+  </DIRECT>
   <OUTPUT>
     <Type>Mover.Outputs.Serial</Type>
     <Name>OUTPUT :: SERIAL</Name>
@@ -408,7 +437,7 @@
       <NUDStartTime>1490</NUDStartTime>
       <NUDStopTime>0</NUDStopTime>
       <TXTStopString></TXTStopString>
-      <TXTSendString>S&lt;Axis1a&gt;&lt;Axis2a&gt;&lt;Axis3a&gt;&lt;Axis4a&gt;&lt;SeatMoverSurge&gt;&lt;SeatMoverSway&gt;&lt;Fan&gt;&lt;0&gt;E</TXTSendString>
+      <TXTSendString>S&lt;Axis1a&gt;&lt;Axis2a&gt;&lt;Axis3a&gt;&lt;Axis4a&gt;&lt;SeatMoverSurge&gt;&lt;SeatMoverSway&gt;&lt;Fan&gt;&lt;BrakeShaker&gt;E</TXTSendString>
       <TXTStartString></TXTStartString>
       <TXTUniqueName>6</TXTUniqueName>
       <TXTInputString></TXTInputString>
@@ -494,11 +523,12 @@
     <item>13</item>
     <item>14</item>
     <item>18</item>
-    <item>3</item>
     <item>21</item>
     <item>22</item>
     <item>16</item>
+    <item>3</item>
     <item>19</item>
+    <item>23</item>
     <item>6</item>
   </Z_ORDER>
 </FLYPT_MOVER>
