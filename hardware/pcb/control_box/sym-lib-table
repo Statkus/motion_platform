@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name WeAct_Studio)(type Legacy)(uri ${KIPRJMOD}/library/WeAct_Studio.lib)(options "")(descr ""))
+  (lib (name Texas_Instrument)(type Legacy)(uri ${KIPRJMOD}/library/Texas_Instrument.lib)(options "")(descr ""))
+)

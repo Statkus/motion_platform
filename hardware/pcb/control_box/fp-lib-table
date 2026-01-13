@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name WeAct_Studio)(type KiCad)(uri ${KIPRJMOD}/library/WeAct_Studio.pretty)(options "")(descr ""))
+)
