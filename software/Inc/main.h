@@ -124,7 +124,7 @@ void Error_Handler(void);
 
 #define DIRECTION_DELAY_US        5
 #define PULSE_DOWN_DELAY_US       5
-#define CALIBRATION_STEP_DELAY_US 200
+#define CALIBRATION_STEP_DELAY_US 300
 #define MAX_SPEED_DELAY_US        1000
 
 #define MIN_MAX_SAFETY_BUFFER 1000 // step
