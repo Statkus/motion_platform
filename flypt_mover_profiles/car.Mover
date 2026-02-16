@@ -197,9 +197,9 @@
       <NUDPitchCORY>0</NUDPitchCORY>
       <NUDPitchCORZ>0</NUDPitchCORZ>
       <pnlPitch.afcSurgeInPitchFilter.txtFilterText>EMALP(VALUE;300.000)</pnlPitch.afcSurgeInPitchFilter.txtFilterText>
-      <pnlPitch.afcPitchFilter.txtFilterText>EMALP(VALUE;300.000)</pnlPitch.afcPitchFilter.txtFilterText>
+      <pnlPitch.afcPitchFilter.txtFilterText>EMALP(LOGISTIC(VALUE;13.2;1);300.000)</pnlPitch.afcPitchFilter.txtFilterText>
       <pnlRoll.afcSwayInRollFilter.txtFilterText>EMALP(VALUE;50.000)</pnlRoll.afcSwayInRollFilter.txtFilterText>
-      <pnlRoll.afcRollFilter.txtFilterText>EMALP(VALUE;300.000)</pnlRoll.afcRollFilter.txtFilterText>
+      <pnlRoll.afcRollFilter.txtFilterText>EMALP(LOGISTIC(VALUE;16.4;1);300.000)</pnlRoll.afcRollFilter.txtFilterText>
       <pnlYaw.afcYawFilter.txtFilterText>VALUE</pnlYaw.afcYawFilter.txtFilterText>
       <pnlHeave.afcHeaveFilter.txtFilterText>EMALP(LOGISTIC(VALUE;50;1);500.000)</pnlHeave.afcHeaveFilter.txtFilterText>
       <pnlSurge.afcSurgeFilter.txtFilterText>VALUE</pnlSurge.afcSurgeFilter.txtFilterText>
@@ -336,7 +336,7 @@
         <item>SOURCE :: DIRT RALLY 2 (UDP)</item>
         <item>SOURCE :: BEAMNG.DRIVE (UDP)</item>
       </TVInputSelection>
-      <HSActuator>30;30</HSActuator>
+      <HSActuator>0;0</HSActuator>
     </CONTROLS>
   </DIRECT>
   <DIRECT>
@@ -350,7 +350,7 @@
       <NUDFrom>-25.0</NUDFrom>
       <NUDTo>25.0</NUDTo>
       <NUDDefault>0</NUDDefault>
-      <AFCFilter.txtFilterText>ADD(EMALP(LOGISTIC(MUL(VALUE;0.300);5;1);300);-3)</AFCFilter.txtFilterText>
+      <AFCFilter.txtFilterText>ADD(DEMALP(LOGISTIC(MUL(VALUE;0.3);5;1);150.000);-1)</AFCFilter.txtFilterText>
       <AFCActuatorFilter.txtFilterText>VALUE</AFCActuatorFilter.txtFilterText>
       <TXTKey>SeatMoverSurge</TXTKey>
       <TXTUniqueName>21</TXTUniqueName>
@@ -371,7 +371,7 @@
   <DIRECT>
     <Type>Mover.Directs.SimpleDirect</Type>
     <Name>SEATMOVER::SWAY</Name>
-    <Location>716,517</Location>
+    <Location>715,521</Location>
     <Size>880,450</Size>
     <Visible>False</Visible>
     <CONTROLS>
@@ -379,7 +379,7 @@
       <NUDFrom>-25.0</NUDFrom>
       <NUDTo>25.0</NUDTo>
       <NUDDefault>0</NUDDefault>
-      <AFCFilter.txtFilterText>EMALP(LOGISTIC(MUL(VALUE;-0.500);5;1);300)</AFCFilter.txtFilterText>
+      <AFCFilter.txtFilterText>DEMALP(LOGISTIC(MUL(VALUE;-0.5);5;1);150.000)</AFCFilter.txtFilterText>
       <AFCActuatorFilter.txtFilterText>VALUE</AFCActuatorFilter.txtFilterText>
       <TXTKey>SeatMoverSway</TXTKey>
       <TXTUniqueName>22</TXTUniqueName>
@@ -491,14 +491,14 @@
     <item>20</item>
     <item>12</item>
     <item>11</item>
-    <item>13</item>
     <item>14</item>
     <item>18</item>
-    <item>3</item>
-    <item>21</item>
-    <item>22</item>
     <item>16</item>
+    <item>13</item>
     <item>19</item>
+    <item>3</item>
+    <item>22</item>
+    <item>21</item>
     <item>6</item>
   </Z_ORDER>
 </FLYPT_MOVER>

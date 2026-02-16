@@ -130,12 +130,45 @@
       <CHKTopMost>False</CHKTopMost>
     </CONTROLS>
   </SOURCE>
+  <SOURCE>
+    <Type>Mover.Sources.UDP.BeamNG</Type>
+    <Name>SOURCE :: BEAMNG.DRIVE (UDP)</Name>
+    <Location>718,4</Location>
+    <Size>550,550</Size>
+    <Visible>False</Visible>
+    <CONTROLS>
+      <PNLOptions.NUDSway>0</PNLOptions.NUDSway>
+      <PNLOptions.NUDSurge>0</PNLOptions.NUDSurge>
+      <PNLOptions.NUDHeave>0</PNLOptions.NUDHeave>
+      <PNLOptions.UDPGauge.NUDPort>4443</PNLOptions.UDPGauge.NUDPort>
+      <PNLOptions.UDPSim.NUDPort>4444</PNLOptions.UDPSim.NUDPort>
+      <PNLOptions.UDPGauge.NUDForwardPort>4445</PNLOptions.UDPGauge.NUDForwardPort>
+      <PNLOptions.UDPSim.NUDForwardPort>4446</PNLOptions.UDPSim.NUDForwardPort>
+      <PNLOptions.UDPGauge.NUDIP1>255</PNLOptions.UDPGauge.NUDIP1>
+      <PNLOptions.UDPSim.NUDIP1>255</PNLOptions.UDPSim.NUDIP1>
+      <PNLOptions.UDPGauge.NUDIP2>255</PNLOptions.UDPGauge.NUDIP2>
+      <PNLOptions.UDPSim.NUDIP2>255</PNLOptions.UDPSim.NUDIP2>
+      <PNLOptions.UDPGauge.NUDIP3>255</PNLOptions.UDPGauge.NUDIP3>
+      <PNLOptions.UDPSim.NUDIP3>255</PNLOptions.UDPSim.NUDIP3>
+      <PNLOptions.UDPGauge.NUDIP4>255</PNLOptions.UDPGauge.NUDIP4>
+      <PNLOptions.UDPSim.NUDIP4>255</PNLOptions.UDPSim.NUDIP4>
+      <PNLOptions.AFCCalculationsFilter.txtFilterText>VALUE</PNLOptions.AFCCalculationsFilter.txtFilterText>
+      <TXTUniqueName>23</TXTUniqueName>
+      <TXTName>SOURCE :: BEAMNG.DRIVE (UDP)</TXTName>
+      <SHInputValues.chkShowHide>True</SHInputValues.chkShowHide>
+      <SHOptions.chkShowHide>True</SHOptions.chkShowHide>
+      <PNLOptions.UDPGauge.CHKForwardUDP>False</PNLOptions.UDPGauge.CHKForwardUDP>
+      <PNLOptions.UDPSim.CHKForwardUDP>False</PNLOptions.UDPSim.CHKForwardUDP>
+      <CHKAutoConnect>True</CHKAutoConnect>
+      <CHKTopMost>False</CHKTopMost>
+    </CONTROLS>
+  </SOURCE>
   <POSE>
     <Type>Mover.Poses.AdvancedPoseFromMotion</Type>
     <Name>POSE :: FROM MOTION</Name>
     <Location>708,116</Location>
     <Size>1093,422</Size>
-    <Visible>False</Visible>
+    <Visible>True</Visible>
     <CONTROLS>
       <pnlSway.nudSwayOutGain>1</pnlSway.nudSwayOutGain>
       <pnlSway.nudSwayInGain>1.000</pnlSway.nudSwayInGain>
@@ -197,7 +230,7 @@
         <item>SOURCE :: DIRT RALLY 2 (UDP)</item>
         <item>SOURCE :: BEAMNG.DRIVE (UDP)</item>
       </TVInputSelection>
-      <pnlPitch.hsPitchInOut>0;0</pnlPitch.hsPitchInOut>
+      <pnlPitch.hsPitchInOut>0;-9.62204610149703E-34</pnlPitch.hsPitchInOut>
       <pnlRoll.hsRollInOut>0;0</pnlRoll.hsRollInOut>
       <pnlYaw.hsYawInOut>0;0</pnlYaw.hsYawInOut>
       <pnlHeave.hsHeaveInOut>0;0</pnlHeave.hsHeaveInOut>
@@ -208,9 +241,9 @@
   <RIG>
     <Type>Mover.Rigs.LinearFour</Type>
     <Name>RIG :: 3DOF WITH 4 LINEAR</Name>
-    <Location>706,307</Location>
-    <Size>1102,556</Size>
-    <Visible>False</Visible>
+    <Location>568,307</Location>
+    <Size>1352,556</Size>
+    <Visible>True</Visible>
     <CONTROLS>
       <PNLActuatorsOutput.nudDefault0>-100</PNLActuatorsOutput.nudDefault0>
       <NUDSwayLimit>0</NUDSwayLimit>
@@ -261,7 +294,7 @@
       <TXTSurgeKey>PPoseSurge</TXTSurgeKey>
       <TXTSwayKey>PPoseSway</TXTSwayKey>
       <TXTName>RIG :: 3DOF WITH 4 LINEAR</TXTName>
-      <SHInputSelection.chkShowHide>False</SHInputSelection.chkShowHide>
+      <SHInputSelection.chkShowHide>True</SHInputSelection.chkShowHide>
       <SHActuators.chkShowHide>True</SHActuators.chkShowHide>
       <CHKAutoGain>False</CHKAutoGain>
       <CHKCalculateSpeed>False</CHKCalculateSpeed>
@@ -341,7 +374,7 @@
       <NUDStartTime>1490</NUDStartTime>
       <NUDStopTime>0</NUDStopTime>
       <TXTStopString></TXTStopString>
-      <TXTSendString>S&lt;Axis1a&gt;&lt;Axis2a&gt;&lt;Axis3a&gt;&lt;Axis4a&gt;&lt;Fan&gt;&lt;BrakeShaker&gt;&lt;250&gt;&lt;50&gt;E</TXTSendString>
+      <TXTSendString>S&lt;Axis1a&gt;&lt;Axis2a&gt;&lt;Axis3a&gt;&lt;Axis4a&gt;&lt;Fan&gt;&lt;BrakeShaker&gt;E</TXTSendString>
       <TXTStartString></TXTStartString>
       <TXTUniqueName>6</TXTUniqueName>
       <TXTInputString></TXTInputString>
@@ -354,7 +387,7 @@
       <DDLStopBits>1</DDLStopBits>
       <DDLDataBits>8</DDLDataBits>
       <DDLBaudRate>921600</DDLBaudRate>
-      <DDLPort>COM5</DDLPort>
+      <DDLPort>COM3</DDLPort>
       <DDLTypeOfOutput>Binary</DDLTypeOfOutput>
       <TVInputSelection />
     </CONTROLS>
@@ -419,51 +452,18 @@
       </tvInputSelection>
     </CONTROLS>
   </VIEWER_GRAPHIC>
-  <SOURCE>
-    <Type>Mover.Sources.UDP.BeamNG</Type>
-    <Name>SOURCE :: BEAMNG.DRIVE (UDP)</Name>
-    <Location>718,4</Location>
-    <Size>550,550</Size>
-    <Visible>False</Visible>
-    <CONTROLS>
-      <PNLOptions.NUDSway>0</PNLOptions.NUDSway>
-      <PNLOptions.NUDSurge>0</PNLOptions.NUDSurge>
-      <PNLOptions.NUDHeave>0</PNLOptions.NUDHeave>
-      <PNLOptions.UDPGauge.NUDPort>4443</PNLOptions.UDPGauge.NUDPort>
-      <PNLOptions.UDPSim.NUDPort>4444</PNLOptions.UDPSim.NUDPort>
-      <PNLOptions.UDPGauge.NUDForwardPort>4445</PNLOptions.UDPGauge.NUDForwardPort>
-      <PNLOptions.UDPSim.NUDForwardPort>4446</PNLOptions.UDPSim.NUDForwardPort>
-      <PNLOptions.UDPGauge.NUDIP1>255</PNLOptions.UDPGauge.NUDIP1>
-      <PNLOptions.UDPSim.NUDIP1>255</PNLOptions.UDPSim.NUDIP1>
-      <PNLOptions.UDPGauge.NUDIP2>255</PNLOptions.UDPGauge.NUDIP2>
-      <PNLOptions.UDPSim.NUDIP2>255</PNLOptions.UDPSim.NUDIP2>
-      <PNLOptions.UDPGauge.NUDIP3>255</PNLOptions.UDPGauge.NUDIP3>
-      <PNLOptions.UDPSim.NUDIP3>255</PNLOptions.UDPSim.NUDIP3>
-      <PNLOptions.UDPGauge.NUDIP4>255</PNLOptions.UDPGauge.NUDIP4>
-      <PNLOptions.UDPSim.NUDIP4>255</PNLOptions.UDPSim.NUDIP4>
-      <PNLOptions.AFCCalculationsFilter.txtFilterText>VALUE</PNLOptions.AFCCalculationsFilter.txtFilterText>
-      <TXTUniqueName>23</TXTUniqueName>
-      <TXTName>SOURCE :: BEAMNG.DRIVE (UDP)</TXTName>
-      <SHInputValues.chkShowHide>True</SHInputValues.chkShowHide>
-      <SHOptions.chkShowHide>True</SHOptions.chkShowHide>
-      <PNLOptions.UDPGauge.CHKForwardUDP>False</PNLOptions.UDPGauge.CHKForwardUDP>
-      <PNLOptions.UDPSim.CHKForwardUDP>False</PNLOptions.UDPSim.CHKForwardUDP>
-      <CHKAutoConnect>True</CHKAutoConnect>
-      <CHKTopMost>False</CHKTopMost>
-    </CONTROLS>
-  </SOURCE>
   <Z_ORDER>
     <item>7</item>
     <item>11</item>
-    <item>13</item>
     <item>19</item>
     <item>22</item>
     <item>16</item>
     <item>14</item>
     <item>18</item>
     <item>12</item>
-    <item>3</item>
     <item>23</item>
+    <item>13</item>
+    <item>3</item>
     <item>6</item>
   </Z_ORDER>
 </FLYPT_MOVER>
