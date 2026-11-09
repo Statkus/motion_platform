@@ -88,7 +88,7 @@
   <SOURCE>
     <Type>Mover.Sources.MMF.AssettoCorsa</Type>
     <Name>SOURCE :: ASSETTO CORSA (MMF)</Name>
-    <Location>440,140</Location>
+    <Location>811,45</Location>
     <Size>550,550</Size>
     <Visible>False</Visible>
     <CONTROLS>
@@ -197,16 +197,16 @@
       <pnlSurge.nudSurgeRange>13.2</pnlSurge.nudSurgeRange>
       <pnlHeave.nudHeaveOutGain>1</pnlHeave.nudHeaveOutGain>
       <pnlHeave.nudHeaveInGain>3.000</pnlHeave.nudHeaveInGain>
-      <pnlHeave.nudHeaveRange>100</pnlHeave.nudHeaveRange>
+      <pnlHeave.nudHeaveRange>200.0</pnlHeave.nudHeaveRange>
       <pnlYaw.nudYawOutGain>0.000</pnlYaw.nudYawOutGain>
       <pnlYaw.nudYawInGain>0</pnlYaw.nudYawInGain>
       <pnlYaw.nudYawRange>10</pnlYaw.nudYawRange>
-      <pnlRoll.nudRollOutGain>0.50</pnlRoll.nudRollOutGain>
-      <pnlRoll.nudRollInGain>1</pnlRoll.nudRollInGain>
-      <pnlRoll.nudRollRange>16.39</pnlRoll.nudRollRange>
-      <pnlPitch.nudPitchOutGain>0.50</pnlPitch.nudPitchOutGain>
-      <pnlPitch.nudPitchInGain>1</pnlPitch.nudPitchInGain>
-      <pnlPitch.nudPitchRange>13.2</pnlPitch.nudPitchRange>
+      <pnlRoll.nudRollOutGain>1</pnlRoll.nudRollOutGain>
+      <pnlRoll.nudRollInGain>0.5</pnlRoll.nudRollInGain>
+      <pnlRoll.nudRollRange>90.0</pnlRoll.nudRollRange>
+      <pnlPitch.nudPitchOutGain>1</pnlPitch.nudPitchOutGain>
+      <pnlPitch.nudPitchInGain>0.5</pnlPitch.nudPitchInGain>
+      <pnlPitch.nudPitchRange>90.0</pnlPitch.nudPitchRange>
       <pnlRoll.nudSwayInRollOutGain>0.0500</pnlRoll.nudSwayInRollOutGain>
       <pnlPitch.nudSurgeInPitchOutGain>0.2</pnlPitch.nudSurgeInPitchOutGain>
       <NUDYawCORX>0</NUDYawCORX>
@@ -541,19 +541,19 @@
   </VIEWER_GRAPHIC>
   <Z_ORDER>
     <item>7</item>
-    <item>20</item>
     <item>12</item>
-    <item>11</item>
+    <item>20</item>
+    <item>24</item>
+    <item>13</item>
+    <item>19</item>
+    <item>21</item>
+    <item>22</item>
+    <item>16</item>
     <item>14</item>
     <item>18</item>
-    <item>19</item>
-    <item>13</item>
-    <item>16</item>
-    <item>21</item>
     <item>3</item>
-    <item>22</item>
-    <item>24</item>
-    <item>6</item>
     <item>23</item>
+    <item>11</item>
+    <item>6</item>
   </Z_ORDER>
 </FLYPT_MOVER>
